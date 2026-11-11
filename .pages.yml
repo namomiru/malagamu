@@ -10,7 +10,9 @@ content:
     type: collection
     path: _entries
     format: yaml-frontmatter
-    filename: "{primary}.md"
+    filename:
+      template: "{primary}.md"
+      field: create
     view:
       primary: headword
       fields: [headword, category, review_status]
