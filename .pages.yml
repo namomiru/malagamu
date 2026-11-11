@@ -50,38 +50,34 @@ content:
         type: string
         list: true
       - name: historical_forms
-               label: 시대별 어형 및 문헌 용례
-               type: object
-               list: true
-               fields:
-                                                        - name: period
-                                                                    label: 국어사 시기
-                                                                                type: select
-                                                                                            options:
-                                                                                                          values: [고대국어, 전기 중세국어, 후기 중세국어, 근세국어, 근대국어, 현대국어]
-                                                                                                                    - name: form
-                                                                                                                                label: 역사적 어형
-                                                                                                                                            type: string
-                                                                                                                                                      - name: meaning
-                                                                                                                                                                  label: 당시 의미
-                                                                                                                                                                              type: text
-                                                                                                                                                                                        - name: source
-                                                                                                                                                                                                    label: 출전 문헌명
-                                                                                                                                                                                                                type: string
-                                                                                                                                                                                                                          - name: date
-                                                                                                                                                                                                                                      label: 문헌 연대
-                                                                                                                                                                                                                                                  type: string
-                                                                                                                                                                                                                                                            - name: citation
-                                                                                                                                                                                                                                                                        label: 문헌 원문
-                                                                                                                                                                                                                                                                                    type: text
-                                                                                                                                                                                                                                                                                              - name: translation
-                                                                                                                                                                                                                                                                                                          label: 현대어 풀이
-                                                                                                                                                                                                                                                                                                                      type: text
-                                                                                                                                                                                                                                                                                                                                - name: evidence
-                                                                                                                                                                                                                                                                                                                                            label: 어형의 근거
-                                                                                                                                                                                                                                                                                                                                                        type: select
-                                                                                                                                                                                                                                                                                                                                                                    options:
-                                                                                                                                                                                                                                                                                                                                                                                  values: [문헌 실증, 재구·추정, 근거 미확인]
+        label: 시대별 어형 및 문헌 용례
+        type: object
+        list: true
+        fields:
+        - name: period
+          label: 국어사 시기
+          type: string
+        - name: form
+          label: 역사적 어형
+          type: string
+        - name: meaning
+          label: 당시 의미
+          type: text
+        - name: source
+          label: 출전 문헌명
+          type: string
+        - name: date
+          label: 문헌 연대
+          type: string
+        - name: citation
+          label: 문헌 원문
+          type: text
+        - name: translation
+          label: 현대어 풀이
+          type: text
+        - name: evidence
+          label: 어형의 근거
+          type: string
       - name: history_json
         label: 시대별 형태 및 의미 정보 (JSON)
         type: code
