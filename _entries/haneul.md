@@ -31,4 +31,8 @@ historical_forms:
   - period: 전기 중세국어
     form: 天乙
     citation: 【天乙】心聞際天乙及昆 <도이장가(1120)>
+  - period: 전기 중세국어
+    form: 哈嫩二
+    date: 15C
+    citation: 【哈嫩二】天 哈嫩二 <조선관역어(1496)>
 ---
