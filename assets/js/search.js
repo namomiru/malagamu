@@ -9,7 +9,7 @@
   input.value = params.get("q") || "";
 
   function normalize(value) {
-    return String(value || "").toLocaleLowerCase("ko-KR").replace(/[\\s·ㆍ]/g, "");
+    return String(value || "").normalize("NFD").toLocaleLowerCase("ko-KR").replace(/[\\s·ㆍ]/g, "");
   }
   function esc(value) {
     return String(value || "").replace(/[&<>"']/g, ch => ({
