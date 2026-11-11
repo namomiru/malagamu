@@ -17,6 +17,24 @@ layout: default
   .record-page .record-sources { padding-left: 1.3rem; }
   .record-page .record-sources li { margin: .55rem 0; }
   .record-page .record-raw { white-space: pre-wrap; overflow-wrap: anywhere; font: inherit; padding: 1rem; background: #f8f6f0; }
+
+  .record-page .history-line { margin: 1rem 0 0 .35rem; border-left: 2px solid #b9b09e; }
+  .record-page .history-item { position: relative; margin: 0 0 1.2rem 1.25rem; }
+  .record-page .history-item::before { content: ""; position: absolute; left: -1.64rem; top: 1.05rem; width: .65rem; height: .65rem; border: 2px solid #82745d; border-radius: 50%; background: #fff; }
+  .record-page .history-item summary { cursor: pointer; list-style: none; padding: .2rem .25rem .8rem; }
+  .record-page .history-item summary::-webkit-details-marker { display: none; }
+  .record-page .history-item summary::after { content: "＋ 용례 보기"; display: block; color: #746d62; font-size: .8rem; margin-top: .4rem; }
+  .record-page .history-item[open] summary::after { content: "－ 용례 접기"; }
+  .record-page .history-period { font-size: .82rem; color: #756b5b; }
+  .record-page .history-form { display: block; font-size: 1.45rem; font-weight: 650; margin: .25rem 0; overflow-wrap: anywhere; }
+  .record-page .history-detail { padding: .85rem 1rem; background: #f8f6f0; border-left: 2px solid #d4cbbc; }
+  .record-page .history-original { font-size: var(--original-size, 13px); line-height: 1.75; white-space: pre-wrap; overflow-wrap: anywhere; margin: .45rem 0 1rem; font-family: inherit; }
+  .record-page .history-translation { font-size: 14px; line-height: 1.7; white-space: pre-wrap; overflow-wrap: anywhere; }
+  .record-page .history-citation { font-size: .78rem; color: #676157; overflow-wrap: anywhere; }
+  .record-page .history-label { font-size: .78rem; font-weight: 650; margin: .8rem 0 .25rem; }
+  .record-page .history-size { display: flex; align-items: center; gap: .35rem; margin: .8rem 0; flex-wrap: wrap; font-size: .8rem; }
+  .record-page .history-size button { font: inherit; padding: .25rem .55rem; border: 1px solid #cfc8b9; background: transparent; cursor: pointer; }
+  .record-page .history-size button[aria-pressed="true"] { background: #e8e1d4; font-weight: 700; }
 </style>
 
 <article class="record-page">
@@ -46,42 +64,59 @@ layout: default
   </section>
   {% endif %}
 
-
   {% if page.historical_forms and page.historical_forms.size > 0 %}
-  <section class="record-section">
-    <h2>시대별 어형 및 문헌 용례</h2>
-    <div class="record-table-wrap">
-      <table class="record-table">
-        <thead><tr><th>시대</th><th>어형</th><th>출전</th></tr></thead>
-        <tbody>
-        {% for item in page.historical_forms %}
-        <tr>
-          <td>{{ item.period | escape }}</td>
-          <td><strong>{{ item.form | escape }}</strong></td>
-          <td>{{ item.source | escape }}{% if item.date %} ({{ item.date | escape }}){% endif %}</td>
-        </tr>
-        {% endfor %}
-        </tbody>
-      </table>
+  <section class="record-section" id="historical-forms">
+    <h2>어휘 변천사</h2>
+    <p class="record-muted">어형을 누르면 해당 어형의 문헌 용례가 펼쳐집니다.</p>
+    <div class="history-size" role="group" aria-label="원문 글자 크기">
+      <span>원문 글자 크기</span>
+      <button type="button" data-original-size="12" aria-pressed="false">작게</button>
+      <button type="button" data-original-size="13" aria-pressed="true">보통</button>
+      <button type="button" data-original-size="16" aria-pressed="false">크게</button>
     </div>
-    {% for item in page.historical_forms %}
-    <div class="record-section">
-      <h3>{{ item.form | escape }}</h3>
-      {% if item.meaning %}<p><strong>당시 의미:</strong> {{ item.meaning | escape }}</p>{% endif %}
-      {% if item.citation %}<blockquote>{{ item.citation | escape | newline_to_br }}</blockquote>{% endif %}
-      {% if item.translation %}<p><strong>현대어 풀이:</strong> {{ item.translation | escape }}</p>{% endif %}
-      {% if item.evidence %}<p class="record-muted">근거: {{ item.evidence | escape }}</p>{% endif %}
+    <div class="history-line">
+      {% for item in page.historical_forms %}
+      <details class="history-item">
+        <summary>
+          <span class="history-period">{{ item.period | escape }}{% if item.date %} · {{ item.date | escape }}{% endif %}</span>
+          <strong class="history-form">{{ item.form | escape }}</strong>
+          {% if item.evidence %}<span class="history-citation">{{ item.evidence | escape }}</span>{% endif %}
+        </summary>
+        <div class="history-detail">
+          {% if item.meaning %}<p><strong>당시 의미:</strong> {{ item.meaning | escape }}</p>{% endif %}
+          {% if item.citation %}
+          <p class="history-label">문헌 원문</p>
+          <div class="history-original">{{ item.citation | escape }}</div>
+          {% endif %}
+          {% if item.translation %}
+          <p class="history-label">현대어 풀이</p>
+          <div class="history-translation">{{ item.translation | escape }}</div>
+          {% endif %}
+          {% if item.source or item.date %}
+          <p class="history-citation">출전: {{ item.source | escape }}{% if item.date %} · {{ item.date | escape }}{% endif %}</p>
+          {% endif %}
+        </div>
+      </details>
+      {% endfor %}
     </div>
-    {% endfor %}
   </section>
+  <script>
+    document.querySelectorAll('#historical-forms [data-original-size]').forEach(function(button) {
+      button.addEventListener('click', function() {
+        var area = document.getElementById('historical-forms');
+        area.style.setProperty('--original-size', button.dataset.originalSize + 'px');
+        area.querySelectorAll('[data-original-size]').forEach(function(b) {
+          b.setAttribute('aria-pressed', String(b === button));
+        });
+      });
+    });
+  </script>
   {% endif %}
 
   {% if page.history_json %}
   <section class="record-section">
-    <h2>시대별 어휘 정보</h2>
-    <div id="record-history" class="record-table-wrap"></div>
-    <template id="record-history-data">{{ page.history_json | jsonify | escape }}</template>
-    <noscript><pre class="record-raw">{{ page.history_json | escape }}</pre></noscript>
+    <h2>기존 시대별 기록</h2>
+    <pre class="record-raw">{{ page.history_json | escape }}</pre>
   </section>
   {% endif %}
 
@@ -114,57 +149,3 @@ layout: default
   <p class="record-status">자료 검증 상태: {{ page.review_status | default: "미검토" | escape }}</p>
 </article>
 
-{% if page.history_json %}
-<script>
-(function () {
-  const source = document.getElementById('record-history-data');
-  const target = document.getElementById('record-history');
-  if (!source || !target) return;
-  const make = (tag, text) => {
-    const el = document.createElement(tag);
-    el.textContent = text == null ? '' : String(text);
-    return el;
-  };
-  const valueText = value => value == null ? '' :
-    typeof value === 'object' ? JSON.stringify(value, null, 2) : String(value);
-  let raw = '';
-  try {
-    const data = JSON.parse(source.textContent);
-    raw = typeof data === 'string' ? data : JSON.stringify(data, null, 2);
-    let history = typeof data === 'string' ? JSON.parse(data) : data;
-    if (history && !Array.isArray(history) && typeof history === 'object') {
-      const keys = Object.keys(history);
-      if (keys.length === 1 && Array.isArray(history[keys[0]])) history = history[keys[0]];
-    }
-    const rows = Array.isArray(history) ? history :
-      history && typeof history === 'object' ? Object.entries(history).map(([period, details]) =>
-        details && typeof details === 'object' && !Array.isArray(details) ? {period, ...details} : {period, form: details}) : [];
-    if (!rows.length) throw new Error('No structured rows');
-    const fields = [...new Set(rows.flatMap(row => row && typeof row === 'object' ? Object.keys(row) : ['value']))];
-    const labels = {period:'시대', era:'시대', age:'시대', stage:'시기', form:'어형', spelling:'표기', word:'어형', variant:'이형태', meaning:'의미', definition:'뜻풀이', source:'문헌 출전', document:'문헌', date:'연대', year:'연대', citation:'원문 용례', quote:'원문', note:'비고', notes:'비고', status:'검증 상태'};
-    const table = document.createElement('table');
-    table.className = 'record-table';
-    const head = document.createElement('thead');
-    const headRow = document.createElement('tr');
-    fields.forEach(field => headRow.appendChild(make('th', labels[field] || field)));
-    head.appendChild(headRow);
-    table.appendChild(head);
-    const body = document.createElement('tbody');
-    rows.forEach(row => {
-      const tr = document.createElement('tr');
-      fields.forEach(field => {
-        const td = make('td', valueText(row && typeof row === 'object' ? row[field] : row));
-        if (['form','spelling','word'].includes(field)) td.className = 'record-form';
-        tr.appendChild(td);
-      });
-      body.appendChild(tr);
-    });
-    table.appendChild(body);
-    target.appendChild(table);
-  } catch (error) {
-    target.appendChild(make('pre', raw || source.textContent));
-    target.firstChild.className = 'record-raw';
-  }
-})();
-</script>
-{% endif %}
