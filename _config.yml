@@ -2,8 +2,8 @@ title: 국어사 아카이브
 description: 중세국어·근세국어·근대국어·현대국어와 한국어 방언의 어휘 및 문헌 원문을 연결하는 자료실
 lang: ko
 timezone: Asia/Seoul
-url: ""
-baseurl: ""
+url: "https://namomiru.github.io"
+baseurl: "/malagamu"
 markdown: kramdown
 permalink: /blog/:year/:month/:day/:title/
 collections:
