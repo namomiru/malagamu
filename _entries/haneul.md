@@ -8,7 +8,7 @@ pronunciation: 하늘
 variants:
   - ᄒᆞᄂᆞᆯ
 historical_forms:
-  - period: 중세국어
+  - period: 후기 중세국어
     form: ᄒᆞᄂᆞᆯㅎ
     date: 15C
     citation: |
