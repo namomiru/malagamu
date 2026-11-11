@@ -1,0 +1,33 @@
+---
+layout: default
+title: 옛한글 입력기
+permalink: /old-hangul/
+---
+<style>
+.oh-wrap{max-width:760px;margin:2rem auto;padding:1rem}.oh-editor{width:100%;min-height:135px;font-size:1.65rem;line-height:1.8;padding:1rem;box-sizing:border-box;font-family:"Noto Serif CJK KR","Noto Serif KR","Malgun Gothic",serif}.oh-keys{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:7px;margin:12px 0 22px}.oh-keys button{font-size:1.5rem;min-height:48px;border:1px solid #ad9a80;border-radius:6px;background:#fffaf0;color:#362b20;cursor:pointer}.oh-tools{display:flex;flex-wrap:wrap;gap:8px}.oh-tools button{padding:10px 16px}.oh-section{margin-top:1.5rem}.oh-note{font-size:.9rem;color:#65594a}
+</style>
+<div class="oh-wrap">
+<h1>옛한글 입력기</h1>
+<p>초성 → 중성 → 종성 순서로 누르면 유니코드 옛한글 조합 글자를 만들 수 있습니다.</p>
+<textarea id="oh-text" class="oh-editor" aria-label="옛한글 입력 내용" spellcheck="false" placeholder="여기에 옛한글을 입력하세요"></textarea>
+<div class="oh-tools"><button type="button" id="oh-copy">전체 복사</button><button type="button" id="oh-back">한 자모 지우기</button><button type="button" id="oh-space">띄어쓰기</button><button type="button" id="oh-clear">모두 지우기</button></div>
+<div id="oh-board"></div>
+<p id="oh-status" class="oh-note" role="status">복사한 내용을 Pages CMS에 붙여넣으세요. 일부 기기에서는 옛한글 조합 글꼴이 필요할 수 있습니다.</p>
+</div>
+<script>
+(function(){
+const groups=[
+["초성",["ᄀ","ᄂ","ᄃ","ᄅ","ᄆ","ᄇ","ᄉ","ᄋ","ᄌ","ᄎ","ᄏ","ᄐ","ᄑ","ᄒ","ᄫ","ᅀ","ᅌ","ᄝ","ᄠ","ᄡ","ᄢ"]],
+["중성",["ᅡ","ᅣ","ᅥ","ᅧ","ᅩ","ᅭ","ᅮ","ᅲ","ᅳ","ᅵ","ᆞ","ᆢ","ᅪ","ᅯ","ᅴ","ᆉ"]],
+["종성",["ᆨ","ᆫ","ᆮ","ᆯ","ᆷ","ᆸ","ᆺ","ᆼ","ᆽ","ᆾ","ᆿ","ᇀ","ᇁ","ᇂ","ᇫ","ᇰ","ᇦ","ᇹ"]],
+["단독 문자",["ㆍ","ㆎ","ㅿ","ㆁ","ㅸ","ㆆ","ㅱ","ㅵ","ㆄ"]]
+];
+const area=document.getElementById("oh-text"), board=document.getElementById("oh-board"), status=document.getElementById("oh-status");
+function insert(s){let a=area.selectionStart,b=area.selectionEnd,v=area.value;area.value=v.slice(0,a)+s+v.slice(b);area.focus();area.setSelectionRange(a+s.length,a+s.length);}
+for(const [title,chars] of groups){const section=document.createElement("section");section.className="oh-section";const h=document.createElement("h2");h.textContent=title;section.append(h);const keys=document.createElement("div");keys.className="oh-keys";for(const ch of chars){const b=document.createElement("button");b.type="button";b.textContent=ch;b.setAttribute("aria-label",title+" "+ch);b.addEventListener("click",()=>insert(ch));keys.append(b);}section.append(keys);board.append(section);}
+document.getElementById("oh-space").onclick=()=>insert(" ");
+document.getElementById("oh-clear").onclick=()=>{area.value="";area.focus();};
+document.getElementById("oh-back").onclick=()=>{const a=area.selectionStart,b=area.selectionEnd,v=area.value;if(a!==b){area.value=v.slice(0,a)+v.slice(b);area.setSelectionRange(a,a);}else if(a){const before=Array.from(v.slice(0,a));before.pop();const prefix=before.join("");area.value=prefix+v.slice(b);area.setSelectionRange(prefix.length,prefix.length);}area.focus();};
+document.getElementById("oh-copy").onclick=async()=>{try{await navigator.clipboard.writeText(area.value);status.textContent="복사 완료! Pages CMS에 붙여넣으세요.";}catch(e){area.focus();area.select();status.textContent="자동 복사가 차단됐습니다. 선택된 글자를 길게 눌러 복사하세요.";}}
+})();
+</script>
