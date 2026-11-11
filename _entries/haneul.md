@@ -27,7 +27,7 @@ historical_forms:
   - period: 근대국어
     form: 하ᄂᆞᆯ
     date: 19C
-    citation: 마치 하ᄂᆞᆯ과 따히 서로 멀고 [성직26a]
+    citation: 【하ᄂᆞᆯ과】마치 하ᄂᆞᆯ과 따히 서로 멀고 <성직26a>
   - period: 전기 중세국어
     form: 天乙
     citation: 【天乙】心聞際天乙及昆 <도이장가(1120)>
