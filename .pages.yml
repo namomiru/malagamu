@@ -11,7 +11,7 @@ content:
     path: _entries
     format: yaml-frontmatter
     extension: md
-    filename: "{primary}.md"
+    filename: "{primary}"
     view:
       primary: headword
       fields: [headword, category, review_status]
