@@ -10,6 +10,7 @@ content:
     type: collection
     path: _entries
     format: yaml-frontmatter
+    extension: md
     filename: "{primary}.md"
     view:
       primary: headword
