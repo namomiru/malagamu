@@ -1,0 +1,160 @@
+# Pages CMS: app.pagescms.org 에서 GitHub로 로그인한 뒤 이 저장소를 선택하세요.
+# 이 파일은 웹 등록 화면에 어떤 자료 입력란을 보여줄지 정의합니다.
+media:
+  input: assets/uploads
+  output: /assets/uploads
+
+content:
+  - name: dictionary
+    label: 국어사 표제어
+    type: collection
+    path: _entries
+    format: yaml-frontmatter
+    filename: "{primary}.md"
+    view:
+      primary: headword
+      fields: [headword, category, review_status]
+      sort: [headword]
+    fields:
+      - name: layout
+        type: string
+        hidden: true
+        default: dictionary
+      - name: title
+        type: string
+        hidden: true
+        default: 표제어
+      - name: headword
+        label: 현대어 표제어
+        type: string
+        required: true
+      - name: short_definition
+        label: 간략 뜻풀이
+        type: text
+      - name: category
+        label: 어휘 분류
+        type: select
+        options:
+          values: [고유어, 한자어, 외래어, 혼종어, 미분류]
+      - name: pronunciation
+        label: 발음
+        type: string
+      - name: definitions
+        label: 뜻풀이
+        type: string
+        list: true
+      - name: variants
+        label: 이형태·옛 표기·관련 표기
+        type: string
+        list: true
+      - name: history_json
+        label: 시대별 형태 및 의미 정보 (JSON)
+        type: code
+        options:
+          language: json
+      - name: etymology
+        label: 어원 및 연구자 해설
+        type: rich-text
+      - name: source_ids
+        label: 연결 문헌 ID
+        type: string
+        list: true
+      - name: review_status
+        label: 검증 상태
+        type: select
+        options:
+          values: [미검토, 서지 확인, 원문 대조, 검증 완료, 재검토 필요]
+      - name: references
+        label: 참고문헌 및 비고
+        type: text
+
+  - name: documents
+    label: 문헌 원문 자료
+    type: collection
+    path: _sources
+    format: yaml-frontmatter
+    filename: "{primary}.md"
+    view:
+      primary: title
+      fields: [title, period, date_text, review_status]
+    fields:
+      - name: layout
+        type: string
+        hidden: true
+        default: document
+      - name: title
+        label: 문헌명
+        type: string
+        required: true
+      - name: author
+        label: 저자·편자
+        type: string
+      - name: date_text
+        label: 작성·간행 시기
+        type: string
+      - name: period
+        label: 국어사 시기
+        type: select
+        options:
+          values: [고대국어, 전기 중세국어, 후기 중세국어, 근세국어, 근대국어, 현대국어, 방언 자료, 기타]
+      - name: location
+        label: 권차·면수·장차
+        type: string
+      - name: repository
+        label: 소장처
+        type: string
+      - name: original_text
+        label: 원문
+        type: text
+      - name: transcription
+        label: 전사·현대어 풀이
+        type: rich-text
+      - name: original_url
+        label: 디지털 원문 주소
+        type: string
+      - name: reference
+        label: 참고문헌·비고
+        type: text
+      - name: review_status
+        label: 검증 상태
+        type: select
+        options:
+          values: [미검토, 서지 확인, 원문 대조, 검증 완료, 재검토 필요]
+
+  - name: blog
+    label: 연구 블로그
+    type: collection
+    path: _posts
+    format: yaml-frontmatter
+    filename:
+      template: "{year}-{month}-{day}-{primary}.md"
+      field: title
+    view:
+      primary: title
+      fields: [title, date, categories]
+      sort: [date]
+      order: desc
+    fields:
+      - name: layout
+        type: string
+        hidden: true
+        default: post
+      - name: title
+        label: 글 제목
+        type: string
+        required: true
+      - name: date
+        label: 작성일
+        type: date
+        required: true
+      - name: categories
+        label: 분류
+        type: string
+        list: true
+      - name: body
+        label: 본문
+        type: rich-text
+
+settings:
+  content:
+    merge: true

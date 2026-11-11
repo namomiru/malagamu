@@ -1,0 +1,12 @@
+---
+layout: default
+title: 통합 검색
+permalink: /search/
+---
+<section class="subpage-heading"><p class="eyebrow">SEARCH THE ARCHIVE</p><h1>통합 검색</h1><p>표제어, 이형태, 시대별 표기와 방언 자료를 검색합니다.</p></section>
+<form id="archive-search-form" class="search-form search-form-small">
+  <label class="sr-only" for="archive-query">검색어</label><input id="archive-query" name="q" type="search" placeholder="검색어 입력"><button type="submit">검색</button>
+</form>
+<p id="search-summary" class="search-summary" aria-live="polite"></p>
+<div id="search-results" class="entry-list"></div>
+<script src="{{ '/assets/js/search.js' | relative_url }}" defer></script>

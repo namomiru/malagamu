@@ -1,1 +1,39 @@
-hi
+---
+layout: default
+title: 첫 화면
+---
+<section class="hero">
+  <p class="eyebrow">HISTORICAL KOREAN DICTIONARY & TEXT ARCHIVE</p>
+  <h1>국어사 아카이브</h1>
+  <p class="hero-lead">오늘의 한국어에서 출발해, 시대와 지역을 거슬러 어휘의 흔적을 찾습니다.</p>
+  <form class="search-form" action="{{ '/search/' | relative_url }}" method="get">
+    <label class="sr-only" for="q">검색어</label>
+    <input id="q" name="q" type="search" placeholder="현대어·옛 표기·방언을 검색하세요" autocomplete="off">
+    <button type="submit">검색</button>
+  </form>
+  <p class="search-hint">예: 사랑 · 어여쁘다 · 가람 · 소용돌이</p>
+</section>
+
+<section class="home-section">
+  <div class="section-heading">
+    <div><p class="eyebrow">BROWSE</p><h2>자료 찾아보기</h2></div>
+  </div>
+  <div class="feature-grid">
+    <a class="feature-card" href="{{ '/dictionary/' | relative_url }}"><span class="feature-mark">辭</span><h3>국어사 대사전</h3><p>표제어와 시대별 어휘 변천을 살펴봅니다.</p></a>
+    <a class="feature-card" href="{{ '/documents/' | relative_url }}"><span class="feature-mark">文</span><h3>문헌 원문 자료실</h3><p>문헌의 서지 정보와 실제 용례를 확인합니다.</p></a>
+    <a class="feature-card" href="{{ '/dialects/' | relative_url }}"><span class="feature-mark">方</span><h3>방언 아카이브</h3><p>지역별 어휘와 조사 자료를 모읍니다.</p></a>
+    <a class="feature-card" href="{{ '/blog/' | relative_url }}"><span class="feature-mark">硏</span><h3>국어학 연구실</h3><p>어휘사와 문헌에 관한 연구 기록을 읽습니다.</p></a>
+  </div>
+</section>
+
+<section class="home-section">
+  <div class="section-heading"><div><p class="eyebrow">RECENT</p><h2>최근 등록 어휘</h2></div><a href="{{ '/dictionary/' | relative_url }}">전체 보기 →</a></div>
+  <div class="entry-list">
+    {% assign recent_entries = site.entries | sort: "headword" %}
+    {% for entry in recent_entries limit: 8 %}
+      <a class="entry-row" href="{{ entry.url | relative_url }}"><strong>{{ entry.headword }}</strong><span>{{ entry.short_definition | default: "어휘 정보 보기" }}</span><span class="row-arrow">→</span></a>
+    {% else %}
+      <p class="empty-note">아직 등록된 표제어가 없습니다. 관리자 화면에서 첫 어휘를 등록해 보세요.</p>
+    {% endfor %}
+  </div>
+</section>

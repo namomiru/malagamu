@@ -1,0 +1,17 @@
+---
+layout: default
+---
+<article class="record-page">
+  <p class="eyebrow">DICTIONARY ENTRY · {{ page.category | default: "분류 미정" }}</p>
+  <h1 class="record-title">{{ page.headword | default: page.title }}</h1>
+  {% if page.pronunciation %}<p class="pronunciation">{{ page.pronunciation }}</p>{% endif %}
+  {% if page.short_definition %}<p class="record-lead">{{ page.short_definition }}</p>{% endif %}
+  {% if page.definitions %}
+  <section class="record-section"><h2>뜻풀이</h2><ol class="definition-list">{% for item in page.definitions %}<li>{{ item }}</li>{% endfor %}</ol></section>
+  {% endif %}
+  {% if page.variants %}<section class="record-section"><h2>이형태·관련 표기</h2><p class="tag-list">{% for item in page.variants %}<span>{{ item }}</span>{% endfor %}</p></section>{% endif %}
+  {% if page.history_json %}<section class="record-section"><h2>시대별 어휘 정보</h2><pre class="data-note">{{ page.history_json | escape }}</pre></section>{% endif %}
+  {% if page.etymology %}<section class="record-section"><h2>어원 및 해설</h2><div class="prose">{{ page.etymology | markdownify }}</div></section>{% endif %}
+  {% if page.source_ids %}<section class="record-section"><h2>문헌 용례</h2><ul>{% for sid in page.source_ids %}<li><a href="{{ '/documents/' | append: sid | append: '/' | relative_url }}">{{ sid }}</a></li>{% endfor %}</ul></section>{% endif %}
+  <p class="record-status">자료 검증 상태: {{ page.review_status | default: "미검토" }}</p>
+</article>

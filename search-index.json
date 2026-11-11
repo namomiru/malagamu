@@ -1,0 +1,17 @@
+---
+layout: null
+---
+[
+{% assign all_entries = site.entries | sort: "headword" %}
+{% for entry in all_entries %}
+  {% assign variants_text = entry.variants | join: " " %}
+  {% assign definitions_text = entry.definitions | join: " " %}
+  {
+    "title": {{ entry.headword | default: entry.title | jsonify }},
+    "url": {{ entry.url | relative_url | jsonify }},
+    "summary": {{ entry.short_definition | default: entry.category | jsonify }},
+    "type": "표제어",
+    "search_text": {{ entry.headword | append: " " | append: variants_text | append: " " | append: definitions_text | append: " " | append: entry.history_json | append: " " | append: entry.etymology | jsonify }}
+  }{% unless forloop.last %},{% endunless %}
+{% endfor %}
+]
