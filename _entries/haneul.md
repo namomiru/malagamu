@@ -2,7 +2,7 @@
 layout: dictionary
 title: 표제어
 headword: 하늘
-short_definition: 지평선이나 수평선 위로 보이는 무한대의 넓은 공간.
+short_definition: "[명사] 지평선이나 수평선 위로 보이는 무한대의 넓은 공간."
 category: 고유어
 pronunciation: 하늘
 variants:
