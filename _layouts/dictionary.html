@@ -46,6 +46,36 @@ layout: default
   </section>
   {% endif %}
 
+
+  {% if page.historical_forms and page.historical_forms.size > 0 %}
+  <section class="record-section">
+    <h2>시대별 어형 및 문헌 용례</h2>
+    <div class="record-table-wrap">
+      <table class="record-table">
+        <thead><tr><th>시대</th><th>어형</th><th>출전</th></tr></thead>
+        <tbody>
+        {% for item in page.historical_forms %}
+        <tr>
+          <td>{{ item.period | escape }}</td>
+          <td><strong>{{ item.form | escape }}</strong></td>
+          <td>{{ item.source | escape }}{% if item.date %} ({{ item.date | escape }}){% endif %}</td>
+        </tr>
+        {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    {% for item in page.historical_forms %}
+    <div class="record-section">
+      <h3>{{ item.form | escape }}</h3>
+      {% if item.meaning %}<p><strong>당시 의미:</strong> {{ item.meaning | escape }}</p>{% endif %}
+      {% if item.citation %}<blockquote>{{ item.citation | escape | newline_to_br }}</blockquote>{% endif %}
+      {% if item.translation %}<p><strong>현대어 풀이:</strong> {{ item.translation | escape }}</p>{% endif %}
+      {% if item.evidence %}<p class="record-muted">근거: {{ item.evidence | escape }}</p>{% endif %}
+    </div>
+    {% endfor %}
+  </section>
+  {% endif %}
+
   {% if page.history_json %}
   <section class="record-section">
     <h2>시대별 어휘 정보</h2>
