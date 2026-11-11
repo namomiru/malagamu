@@ -7,6 +7,7 @@ category: 고유어
 pronunciation: 하늘
 variants:
   - ᄒᆞᄂᆞᆯ
+  - 하ᄂᆞᆯ
 historical_forms:
   - period: 후기 중세국어
     form: ᄒᆞᄂᆞᆯㅎ
