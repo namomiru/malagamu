@@ -18,7 +18,14 @@ layout: default
   .record-page .record-sources li { margin: .55rem 0; }
   .record-page .record-raw { white-space: pre-wrap; overflow-wrap: anywhere; font: inherit; padding: 1rem; background: #f8f6f0; }
 
-  .record-page .history-line { margin: 1rem 0 0 .35rem; border-left: 2px solid #b9b09e; }
+  .record-page .history-line { margin: 1rem 0 0 .35rem; }
+  .record-page .history-era { margin: 1.6rem 0; }
+  .record-page .history-era-title { font-size: 1.28rem; font-weight: 750; color: #40382c; margin: 0 0 1rem; padding: .5rem .65rem; border-left: 4px solid #77674e; background: #f3f0e8; }
+  .record-page .history-era-items { border-left: 2px solid #b9b09e; margin-left: .5rem; padding-bottom: .1rem; }
+  .record-page .history-item .history-period { display: none; }
+  .record-page .history-year { display: inline-block; font-size: .94rem; font-weight: 700; color: #58452d; margin-top: .35rem; }
+  .record-page .history-year-label { font-size: .78rem; font-weight: 400; color: #726a5e; margin-right: .35rem; }
+  .record-page .history-item summary { border-bottom: 1px solid #e3dfd5; }
   .record-page .history-item { position: relative; margin: 0 0 1.2rem 1.25rem; }
   .record-page .history-item::before { content: ""; position: absolute; left: -1.64rem; top: 1.05rem; width: .65rem; height: .65rem; border: 2px solid #82745d; border-radius: 50%; background: #fff; }
   .record-page .history-item summary { cursor: pointer; list-style: none; padding: .2rem .25rem .8rem; }
@@ -78,8 +85,9 @@ layout: default
       {% for item in page.historical_forms %}
       <details class="history-item">
         <summary>
-          <span class="history-period">{{ item.period | escape }}{% if item.date %} · {{ item.date | escape }}{% endif %}</span>
+          <span class="history-period" data-period="{{ item.period | escape }}">{{ item.period | escape }}</span>
           <strong class="history-form">{{ item.form | escape }}</strong>
+          <span class="history-year"><span class="history-year-label">문헌 연대</span>{% if item.date %}{{ item.date | escape }}{% else %}연대 미상{% endif %}</span>
           {% if item.evidence %}<span class="history-citation">{{ item.evidence | escape }}</span>{% endif %}
         </summary>
         <div class="history-detail">
@@ -101,20 +109,35 @@ layout: default
     </div>
   </section>
   <script>
-    // Order timeline entries by linguistic period; keep registration order within a period.
+    // Group entries by historical period while preserving registration order within each era.
     (function() {
       var line = document.querySelector('#historical-forms .history-line');
       if (!line) return;
       var order = ['고대국어', '전기 중세국어', '후기 중세국어', '근세국어', '근대국어', '현대국어'];
       var items = Array.from(line.querySelectorAll(':scope > .history-item'));
       items.sort(function(a, b) {
-        var periodA = a.querySelector('.history-period')?.textContent.split('·')[0].trim() || '';
-        var periodB = b.querySelector('.history-period')?.textContent.split('·')[0].trim() || '';
-        var rankA = order.indexOf(periodA);
-        var rankB = order.indexOf(periodB);
-        return (rankA < 0 ? order.length : rankA) - (rankB < 0 ? order.length : rankB);
+        var pa = a.querySelector('[data-period]')?.getAttribute('data-period') || '';
+        var pb = b.querySelector('[data-period]')?.getAttribute('data-period') || '';
+        var ra = order.indexOf(pa), rb = order.indexOf(pb);
+        return (ra < 0 ? order.length : ra) - (rb < 0 ? order.length : rb);
       });
-      items.forEach(function(item) { line.appendChild(item); });
+      var groups = new Map();
+      items.forEach(function(item) {
+        var period = item.querySelector('[data-period]')?.getAttribute('data-period') || '시대 미상';
+        if (!groups.has(period)) {
+          var section = document.createElement('section');
+          section.className = 'history-era';
+          var heading = document.createElement('h3');
+          heading.className = 'history-era-title';
+          heading.textContent = period;
+          var container = document.createElement('div');
+          container.className = 'history-era-items';
+          section.append(heading, container);
+          line.appendChild(section);
+          groups.set(period, container);
+        }
+        groups.get(period).appendChild(item);
+      });
     })();
     document.querySelectorAll('#historical-forms [data-original-size]').forEach(function(button) {
       button.addEventListener('click', function() {
