@@ -2,22 +2,19 @@
 layout: dictionary
 title: 표제어
 headword: 하늘
-short_definition: ㅇ
+short_definition: 지평선이나 수평선 위로 보이는 무한대의 넓은 공간.
 category: 고유어
 pronunciation: 하늘
 variants:
   - ᄒᆞᄂᆞᆯ
 historical_forms:
-  - period: 후기 중세국어
-    form: ᄒᆞᄂᆞᆯ
-    meaning: 화면 표시 확인용
-    source: 테스트자료
-    date: "1500"
-    citation: 동해고략
-    translation: 번역이다
-    evidence: 근거 미확인
-  - period: 고대국어
-    form: 下奴乙
-    source: 삼국사기
-    date: "452"
+  - period: 중세국어
+    form: ᄒᆞᄂᆞᆯㅎ
+    date: 15C
+    citation: |
+      ᄒᆞᄂᆞᆳ 둘에 三百六十五度ᄒᆞ고 ᄯᅩ 度ᄅᆞᆯ 네헤 ᄂᆞᆫ호아 ᄒᆞ나히니 [능엄06:16b-17a]
+  - period: 근대국어
+    form: 하ᄂᆞᆯ
+    date: 19C
+    citation: 마치 하ᄂᆞᆯ과 따히 서로 멀고 [성직26a]
 ---
