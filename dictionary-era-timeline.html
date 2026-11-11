@@ -1,0 +1,189 @@
+---
+layout: default
+---
+<style>
+  .record-page { max-width: 850px; margin: 0 auto; }
+  .record-page .record-meta { display: flex; flex-wrap: wrap; gap: .45rem; margin: .8rem 0 1.4rem; }
+  .record-page .record-chip { display: inline-block; padding: .25rem .65rem; border: 1px solid #cfc8b9; background: #f8f6f0; font-size: .88rem; }
+  .record-page .record-section { margin: 2rem 0; }
+  .record-page .record-section h2 { padding-bottom: .5rem; border-bottom: 1px solid #cfc8b9; }
+  .record-page .record-table-wrap { overflow-x: auto; }
+  .record-page .record-table { border-collapse: collapse; width: 100%; font-size: .95rem; }
+  .record-page .record-table th, .record-page .record-table td { border-bottom: 1px solid #e3dfd5; padding: .75rem .65rem; text-align: left; vertical-align: top; overflow-wrap: anywhere; }
+  .record-page .record-table th { background: #f6f3eb; font-weight: 600; white-space: nowrap; }
+  .record-page .record-table th:first-child { width: 25%; }
+  .record-page .record-form { font-size: 1.06rem; font-weight: 600; }
+  .record-page .record-muted { color: #69665e; font-size: .88rem; }
+  .record-page .record-sources { padding-left: 1.3rem; }
+  .record-page .record-sources li { margin: .55rem 0; }
+  .record-page .record-raw { white-space: pre-wrap; overflow-wrap: anywhere; font: inherit; padding: 1rem; background: #f8f6f0; }
+
+  .record-page .history-line { margin: 1rem 0 0 .35rem; }
+  .record-page .history-era { margin: 1.6rem 0; }
+  .record-page .history-era-title { font-size: 1.28rem; font-weight: 750; color: #40382c; margin: 0 0 1rem; padding: .5rem .65rem; border-left: 4px solid #77674e; background: #f3f0e8; }
+  .record-page .history-era-items { border-left: 2px solid #b9b09e; margin-left: .5rem; padding-bottom: .1rem; }
+  .record-page .history-item .history-period { display: none; }
+  .record-page .history-year { display: inline-block; font-size: .94rem; font-weight: 700; color: #58452d; margin-top: .35rem; }
+  .record-page .history-year-label { font-size: .78rem; font-weight: 400; color: #726a5e; margin-right: .35rem; }
+  .record-page .history-item summary { border-bottom: 1px solid #e3dfd5; }
+  .record-page .history-item { position: relative; margin: 0 0 1.2rem 1.25rem; }
+  .record-page .history-item::before { content: ""; position: absolute; left: -1.64rem; top: 1.05rem; width: .65rem; height: .65rem; border: 2px solid #82745d; border-radius: 50%; background: #fff; }
+  .record-page .history-item summary { cursor: pointer; list-style: none; padding: .2rem .25rem .8rem; }
+  .record-page .history-item summary::-webkit-details-marker { display: none; }
+  .record-page .history-item summary::after { content: "＋ 용례 보기"; display: block; color: #746d62; font-size: .8rem; margin-top: .4rem; }
+  .record-page .history-item[open] summary::after { content: "－ 용례 접기"; }
+  .record-page .history-period { font-size: .82rem; color: #756b5b; }
+  .record-page .history-form { display: block; font-size: 1.45rem; font-weight: 650; margin: .25rem 0; overflow-wrap: anywhere; }
+  .record-page .history-detail { padding: .85rem 1rem; background: #f8f6f0; border-left: 2px solid #d4cbbc; }
+  .record-page .history-original { font-size: var(--original-size, 13px); line-height: 1.75; white-space: pre-wrap; overflow-wrap: anywhere; margin: .45rem 0 1rem; font-family: inherit; }
+  .record-page .history-translation { font-size: 14px; line-height: 1.7; white-space: pre-wrap; overflow-wrap: anywhere; }
+  .record-page .history-citation { font-size: .78rem; color: #676157; overflow-wrap: anywhere; }
+  .record-page .history-label { font-size: .78rem; font-weight: 650; margin: .8rem 0 .25rem; }
+  .record-page .history-size { display: flex; align-items: center; gap: .35rem; margin: .8rem 0; flex-wrap: wrap; font-size: .8rem; }
+  .record-page .history-size button { font: inherit; padding: .25rem .55rem; border: 1px solid #cfc8b9; background: transparent; cursor: pointer; }
+  .record-page .history-size button[aria-pressed="true"] { background: #e8e1d4; font-weight: 700; }
+</style>
+
+<article class="record-page">
+  <p class="eyebrow">DICTIONARY ENTRY · {{ page.category | default: "분류 미정" | escape }}</p>
+  <h1 class="record-title">{{ page.headword | default: page.title | escape }}</h1>
+  {% if page.pronunciation %}<p class="pronunciation">{{ page.pronunciation | escape }}</p>{% endif %}
+  {% if page.short_definition %}<p class="record-lead">{{ page.short_definition | escape }}</p>{% endif %}
+
+  <div class="record-meta">
+    {% if page.part_of_speech %}<span class="record-chip">품사 · {{ page.part_of_speech | escape }}</span>{% endif %}
+    {% if page.category %}<span class="record-chip">분류 · {{ page.category | escape }}</span>{% endif %}
+    <span class="record-chip">검증 · {{ page.review_status | default: "미검토" | escape }}</span>
+  </div>
+
+  {% if page.definitions %}
+  <section class="record-section">
+    <h2>뜻풀이</h2>
+    <ol class="definition-list">{% for item in page.definitions %}<li>{{ item | escape }}</li>{% endfor %}</ol>
+  </section>
+  {% endif %}
+
+  {% if page.variants %}
+  <section class="record-section">
+    <h2>이형태·관련 표기</h2>
+    <p class="tag-list">{% for item in page.variants %}<span>{{ item | escape }}</span>{% endfor %}</p>
+    <p class="record-muted">각 표기의 시대와 출전은 확인된 자료에 따라 별도로 기재합니다.</p>
+  </section>
+  {% endif %}
+
+  {% if page.historical_forms and page.historical_forms.size > 0 %}
+  <section class="record-section" id="historical-forms">
+    <h2>어휘 변천사</h2>
+    <p class="record-muted">어형을 누르면 해당 어형의 문헌 용례가 펼쳐집니다.</p>
+    <div class="history-size" role="group" aria-label="원문 글자 크기">
+      <span>원문 글자 크기</span>
+      <button type="button" data-original-size="12" aria-pressed="false">작게</button>
+      <button type="button" data-original-size="13" aria-pressed="true">보통</button>
+      <button type="button" data-original-size="16" aria-pressed="false">크게</button>
+    </div>
+    <div class="history-line">
+      {% for item in page.historical_forms %}
+      <details class="history-item">
+        <summary>
+          <span class="history-period" data-period="{{ item.period | escape }}">{{ item.period | escape }}</span>
+          <strong class="history-form">{{ item.form | escape }}</strong>
+          <span class="history-year"><span class="history-year-label">문헌 연대</span>{% if item.date %}{{ item.date | escape }}{% else %}연대 미상{% endif %}</span>
+          {% if item.evidence %}<span class="history-citation">{{ item.evidence | escape }}</span>{% endif %}
+        </summary>
+        <div class="history-detail">
+          {% if item.meaning %}<p><strong>당시 의미:</strong> {{ item.meaning | escape }}</p>{% endif %}
+          {% if item.citation %}
+          <p class="history-label">문헌 원문</p>
+          <div class="history-original">{{ item.citation | escape }}</div>
+          {% endif %}
+          {% if item.translation %}
+          <p class="history-label">현대어 풀이</p>
+          <div class="history-translation">{{ item.translation | escape }}</div>
+          {% endif %}
+          {% if item.source or item.date %}
+          <p class="history-citation">출전: {{ item.source | escape }}{% if item.date %} · {{ item.date | escape }}{% endif %}</p>
+          {% endif %}
+        </div>
+      </details>
+      {% endfor %}
+    </div>
+  </section>
+  <script>
+    // Group entries by historical period while preserving registration order within each era.
+    (function() {
+      var line = document.querySelector('#historical-forms .history-line');
+      if (!line) return;
+      var order = ['고대국어', '전기 중세국어', '후기 중세국어', '근세국어', '근대국어', '현대국어'];
+      var items = Array.from(line.querySelectorAll(':scope > .history-item'));
+      items.sort(function(a, b) {
+        var pa = a.querySelector('[data-period]')?.getAttribute('data-period') || '';
+        var pb = b.querySelector('[data-period]')?.getAttribute('data-period') || '';
+        var ra = order.indexOf(pa), rb = order.indexOf(pb);
+        return (ra < 0 ? order.length : ra) - (rb < 0 ? order.length : rb);
+      });
+      var groups = new Map();
+      items.forEach(function(item) {
+        var period = item.querySelector('[data-period]')?.getAttribute('data-period') || '시대 미상';
+        if (!groups.has(period)) {
+          var section = document.createElement('section');
+          section.className = 'history-era';
+          var heading = document.createElement('h3');
+          heading.className = 'history-era-title';
+          heading.textContent = period;
+          var container = document.createElement('div');
+          container.className = 'history-era-items';
+          section.append(heading, container);
+          line.appendChild(section);
+          groups.set(period, container);
+        }
+        groups.get(period).appendChild(item);
+      });
+    })();
+    document.querySelectorAll('#historical-forms [data-original-size]').forEach(function(button) {
+      button.addEventListener('click', function() {
+        var area = document.getElementById('historical-forms');
+        area.style.setProperty('--original-size', button.dataset.originalSize + 'px');
+        area.querySelectorAll('[data-original-size]').forEach(function(b) {
+          b.setAttribute('aria-pressed', String(b === button));
+        });
+      });
+    });
+  </script>
+  {% endif %}
+
+  {% if page.history_json %}
+  <section class="record-section">
+    <h2>기존 시대별 기록</h2>
+    <pre class="record-raw">{{ page.history_json | escape }}</pre>
+  </section>
+  {% endif %}
+
+  {% if page.dialects %}
+  <section class="record-section">
+    <h2>방언 자료</h2>
+    <div class="prose">{{ page.dialects | markdownify }}</div>
+  </section>
+  {% endif %}
+
+  {% if page.etymology %}
+  <section class="record-section">
+    <h2>어원 및 연구</h2>
+    <div class="prose">{{ page.etymology | markdownify }}</div>
+  </section>
+  {% endif %}
+
+  {% if page.source_ids %}
+  <section class="record-section">
+    <h2>관련 문헌</h2>
+    <ul class="record-sources">
+      {% for sid in page.source_ids %}
+      <li><a href="{{ '/documents/' | append: sid | append: '/' | relative_url }}">{{ sid | escape }}</a></li>
+      {% endfor %}
+    </ul>
+    <p class="record-muted">문헌명을 누르면 해당 문헌 자료 페이지로 이동합니다.</p>
+  </section>
+  {% endif %}
+
+  <p class="record-status">자료 검증 상태: {{ page.review_status | default: "미검토" | escape }}</p>
+</article>
+
