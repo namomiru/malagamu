@@ -101,6 +101,21 @@ layout: default
     </div>
   </section>
   <script>
+    // Order timeline entries by linguistic period; keep registration order within a period.
+    (function() {
+      var line = document.querySelector('#historical-forms .history-line');
+      if (!line) return;
+      var order = ['고대국어', '전기 중세국어', '후기 중세국어', '근세국어', '근대국어', '현대국어'];
+      var items = Array.from(line.querySelectorAll(':scope > .history-item'));
+      items.sort(function(a, b) {
+        var periodA = a.querySelector('.history-period')?.textContent.split('·')[0].trim() || '';
+        var periodB = b.querySelector('.history-period')?.textContent.split('·')[0].trim() || '';
+        var rankA = order.indexOf(periodA);
+        var rankB = order.indexOf(periodB);
+        return (rankA < 0 ? order.length : rankA) - (rankB < 0 ? order.length : rankB);
+      });
+      items.forEach(function(item) { line.appendChild(item); });
+    })();
     document.querySelectorAll('#historical-forms [data-original-size]').forEach(function(button) {
       button.addEventListener('click', function() {
         var area = document.getElementById('historical-forms');
