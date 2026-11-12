@@ -11,5 +11,9 @@ historical_forms:
   - period: 현대국어
     form: 짜켓스
     date: 20C
-    citation: 짜켓스 입은 좌우 허리에 <염상섭, 실직1936:440>
+    citation: 【짜켓스】짜켓스 입은 좌우 허리에 <염상섭, 실직1936:440>
+  - period: 현대국어
+    form: 짝겥
+    date: 20C
+    citation: 【짝겥】짝겥 바람으로 지금 막 들어왔군요 <염상섭, 실직1936:440>
 ---
